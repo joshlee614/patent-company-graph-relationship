@@ -1,0 +1,26 @@
+# Backend / Analysis Scripts
+database/
+kipris-collector/
+patent_matching/
+
+# Data and Secrets
+*.csv
+.env
+kipris-csv/
+
+# Python Virtual Environments
+.venv/
+venv/
+env/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+
+# Node Modules
+node_modules/
+package-lock.json
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
