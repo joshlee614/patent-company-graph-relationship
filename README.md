@@ -17,3 +17,5 @@
 현재 데이터를 연동하기 위해 두 가지 방식 중 하나를 사용할 수 있습니다:
 1. `app.js` 최상단의 `API_BASE_URL` 값을 별도 Application에서 구동 중인 데이터 API 서버 또는 AWS S3 등 외부 스토리지 링크로 변경.
 2. (로컬 검증용) 로컬 서버로 사용할 땐 `API_BASE_URL`을 `.` 혹은 빈 문자열로 둔 후, `output_edges.csv`, `output_demand_scores.csv` 파일을 `frontend` 폴더에 위치시킨 채 서버를 기동.
+
+김예솜 멍청이 ㅋ 
