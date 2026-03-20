@@ -99,6 +99,7 @@ body {
     letter-spacing: -0.02em;
     background: linear-gradient(to right, #fff, #94a3b8);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -654,4 +655,170 @@ body {
     color: var(--text-secondary);
 }
 .action-btn.neutral:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+/* ---------------------------------------------
+ * RESPONSIVE DESIGN (Media Queries)
+ * --------------------------------------------- */
+
+/* Tablet & Small Desktop (max-width: 1200px) */
+@media (max-width: 1200px) {
+    .analysis-area {
+        grid-template-columns: 1fr; /* Stack table and graph vertically */
+        height: auto;
+        gap: 24px;
+    }
+
+    .top-companies, .graph-view {
+        height: 500px; /* Provide fixed height to sections when stacked */
+    }
+}
+
+/* Tablet Portrait (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 240px;
+        padding: 20px 16px;
+    }
+    
+    .main-content {
+        padding: 24px;
+    }
+    
+    .summary-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    /* Transform Sidebar into a Sticky Top Nav */
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-glass);
+        padding: 16px;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        z-index: 50;
+        position: sticky;
+        top: 0;
+        background: rgba(15, 17, 26, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
+    .brand {
+        margin-bottom: 0;
+    }
+
+    /* Turn Vertical Nav Menu into Horizontal Scrollable Tabs */
+    .nav-menu {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        width: 100%;
+        order: 3;
+        gap: 8px;
+        margin-top: 16px;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+    }
+    .nav-menu::-webkit-scrollbar {
+        display: none; /* Hide scrollbar Chrome/Saf/Edge */
+    }
+    
+    .nav-item {
+        white-space: nowrap;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-item.active::before {
+        display: none; /* Remove left border indicator */
+    }
+
+    .user-profile {
+        padding-top: 0;
+        border-top: none;
+        order: 2;
+        margin-left: auto;
+    }
+    
+    .user-info { 
+        display: none; /* Hide user name to save space */
+    }
+
+    /* Main Content Adjustments */
+    .main-content {
+        overflow-y: visible;
+        padding: 16px;
+    }
+
+    .top-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .top-nav h1 {
+        font-size: 1.4rem;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    .summary-cards {
+        grid-template-columns: 1fr; /* Stack cards */
+    }
+
+    .top-companies, .graph-view {
+        height: 600px;
+    }
+
+    .table-container {
+        padding: 0;
+    }
+    
+    .data-table th, .data-table td {
+        padding: 12px 8px;
+        font-size: 0.8rem;
+    }
+    
+    /* Responsive Action Panel */
+    .action-panel {
+        width: 100%; /* Take full width on mobile */
+        right: -100%;
+        border-left: none;
+        border-top: 1px solid var(--border-glass);
+    }
+    
+    .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .panel-header h2 {
+        font-size: 1rem;
+    }
+    
+    .graph-legend {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .score-breakdown {
+        grid-template-columns: 1fr; /* Stack score items */
+    }
+}
 
