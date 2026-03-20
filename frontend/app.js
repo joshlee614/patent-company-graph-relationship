@@ -30,7 +30,7 @@ function getCategoryName(code) {
 // Configuration for Backend Decoupling (Phase 6 & 7)
 // To connect to a real database or remote storage (like S3 or another Application), change this URL.
 const CONFIG = {
-    API_BASE_URL: 'https://raw.githubusercontent.com/joshlee614/patent-company-graph-relationship/data' // Fully detached Serverless API
+    API_BASE_URL: 'data' // Integrated data branch into main
 };
 
 document.addEventListener("DOMContentLoaded", () => {

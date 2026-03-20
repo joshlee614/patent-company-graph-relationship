@@ -5,6 +5,7 @@ patent_matching/
 
 # Data and Secrets
 *.csv
+!frontend/data/*.csv
 .env
 kipris-csv/
 
