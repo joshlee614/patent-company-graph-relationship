@@ -27,10 +27,10 @@ function getCategoryName(code) {
     return map[code] || '기타/미분류';
 }
 
-// Configuration for Backend Decoupling (Phase 6)
+// Configuration for Backend Decoupling (Phase 6 & 7)
 // To connect to a real database or remote storage (like S3 or another Application), change this URL.
 const CONFIG = {
-    API_BASE_URL: 'data' // Default local path. Replace e.g., 'https://my-data-app.com/api'
+    API_BASE_URL: 'https://raw.githubusercontent.com/joshlee614/patent-company-graph-relationship/data' // Fully detached Serverless API
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -95,8 +95,28 @@ function renderCompanyTable(companies) {
     });
 }
 
-// ------ MOCK CRM DATA LOGIC ------
+// ------ MOCK CRM & DART DATA LOGIC ------
 const STATUS_TYPES = ['none', 'contact', 'progress', 'done'];
+
+function getMockFinancials(companyName) {
+    let hash = 0;
+    for (let i = 0; i < companyName.length; i++) hash += companyName.charCodeAt(i);
+    
+    const revenueGen = (hash * 13) % 900 + 10; // 10억 ~ 910억
+    const employeesGen = (hash * 7) % 500 + 10; // 10명 ~ 510명
+    
+    const firstNames = ['김', '이', '박', '최', '정', '강', '조', '윤', '장', '임', '한', '오', '서', '신', '권'];
+    const lastNames1 = ['민', '영', '지', '성', '준', '현', '우', '정', '진', '수', '태', '동', '재', '석'];
+    const lastNames2 = ['수', '호', '훈', '환', '희', '건', '영', '철', '민', '준', '아', '윤', '우', '진'];
+    
+    const ceo = firstNames[hash % firstNames.length] + lastNames1[(hash*2) % lastNames1.length] + lastNames2[(hash*3) % lastNames2.length];
+    
+    return {
+        revenue: `${revenueGen}억 원`,
+        employees: `${employeesGen}명`,
+        ceo: `${ceo}`
+    };
+}
 
 function getMockCRMData(companyName) {
     const hash = companyName.length + companyName.charCodeAt(0) + companyName.charCodeAt(companyName.length - 1);
@@ -308,6 +328,20 @@ function openActionPanel(nodeId, nodeData, connectedEdges) {
         <strong style="color:#e2e8f0;">타겟 분야:</strong> ${catStr}${riskBadge}<br>
         <strong style="color:#e2e8f0; margin-top:8px; display:inline-block;">핵심 보유 기술:</strong> ${compObj.BestPatentTitle || 'N/A'}<br>
         <div style="margin-top:6px; color:#94a3b8; font-size:13px; line-height:1.5;">${compObj.BestPatentSummary ? compObj.BestPatentSummary.substring(0,250)+'...' : '요약 정보 없음'}</div>
+    `;
+    
+    // DART Simulated Financials
+    const fins = getMockFinancials(companyObj.id);
+    document.getElementById('panel-financials').innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span style="color:#94a3b8;">대표이사:</span> <strong>${fins.ceo}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span style="color:#94a3b8;">최근 연매출:</span> <strong style="color:#10b981;">${fins.revenue}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+            <span style="color:#94a3b8;">임직원 수:</span> <strong>${fins.employees}</strong>
+        </div>
     `;
     
     // Contact History
