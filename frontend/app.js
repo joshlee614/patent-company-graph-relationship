@@ -331,7 +331,7 @@ function openActionPanel(nodeId, nodeData, connectedEdges) {
     `;
     
     // DART Simulated Financials
-    const fins = getMockFinancials(companyObj.id);
+    const fins = getMockFinancials(nodeData.companyName || nodeData.label || 'Unknown');
     document.getElementById('panel-financials').innerHTML = `
         <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
             <span style="color:#94a3b8;">대표이사:</span> <strong>${fins.ceo}</strong>
