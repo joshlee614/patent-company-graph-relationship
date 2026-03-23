@@ -656,6 +656,24 @@ body {
 }
 .action-btn.neutral:hover { background: rgba(255,255,255,0.05); color: #fff; }
 
+/* Table Sorting */
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+.sortable:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.05);
+}
+.sort-icon {
+    display: inline-block;
+    width: 0.8em;
+    font-size: 0.8em;
+    margin-left: 4px;
+    color: #94a3b8;
+}
+
 /* ---------------------------------------------
  * RESPONSIVE DESIGN (Media Queries)
  * --------------------------------------------- */

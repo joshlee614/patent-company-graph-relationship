@@ -33,7 +33,18 @@ const CONFIG = {
     API_BASE_URL: 'data' // Integrated data branch into main
 };
 
+let allCompaniesData = [];
+let currentSortCol = 'TotalScore';
+let isDesc = true;
+
 document.addEventListener("DOMContentLoaded", () => {
+    // Initialize sort headers
+    document.querySelectorAll('.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const col = th.getAttribute('data-sort');
+            handleSort(col);
+        });
+    });
     loadRealData();
 });
 
@@ -43,10 +54,50 @@ function loadRealData() {
         header: true,
         dynamicTyping: true,
         complete: function(results) {
-            const validCompanies = results.data.filter(c => c.Company && c.University);
-            topCompaniesData = validCompanies.slice(0, 50); 
-            renderCompanyTable(topCompaniesData);
+            allCompaniesData = results.data.filter(c => c.Company && c.University);
+            sortAndRenderTable();
             loadEdgesData();
+        }
+    });
+}
+
+function handleSort(col) {
+    if (currentSortCol === col) {
+        isDesc = !isDesc;
+    } else {
+        currentSortCol = col;
+        isDesc = true;
+    }
+    sortAndRenderTable();
+}
+
+function sortAndRenderTable() {
+    allCompaniesData.sort((a, b) => {
+        let valA = a[currentSortCol];
+        let valB = b[currentSortCol];
+
+        if (typeof valA === 'string' && !isNaN(Number(valA))) valA = Number(valA);
+        if (typeof valB === 'string' && !isNaN(Number(valB))) valB = Number(valB);
+        if (valA === undefined) valA = 0;
+        if (valB === undefined) valB = 0;
+
+        if (valA < valB) return isDesc ? 1 : -1;
+        if (valA > valB) return isDesc ? -1 : 1;
+        return 0;
+    });
+
+    renderCompanyTable(allCompaniesData.slice(0, 50));
+    updateSortIcons();
+}
+
+function updateSortIcons() {
+    document.querySelectorAll('.sortable').forEach(th => {
+        const icon = th.querySelector('.sort-icon');
+        if (th.getAttribute('data-sort') === currentSortCol) {
+            icon.textContent = isDesc ? '▼' : '▲';
+            icon.style.color = '#3b82f6';
+        } else {
+            icon.textContent = '';
         }
     });
 }
