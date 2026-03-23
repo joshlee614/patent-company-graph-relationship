@@ -36,6 +36,7 @@ const CONFIG = {
 let allCompaniesData = [];
 let currentSortCol = 'TotalScore';
 let isDesc = true;
+let currentSearchQuery = '';
 
 document.addEventListener("DOMContentLoaded", () => {
     // Initialize sort headers
@@ -45,6 +46,20 @@ document.addEventListener("DOMContentLoaded", () => {
             handleSort(col);
         });
     });
+    
+    // Search listener
+    let debounceTimer;
+    const searchInput = document.getElementById('main-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                currentSearchQuery = e.target.value.trim().toLowerCase();
+                sortAndRenderTable();
+            }, 300);
+        });
+    }
+    
     loadRealData();
 });
 
@@ -72,7 +87,31 @@ function handleSort(col) {
 }
 
 function sortAndRenderTable() {
-    allCompaniesData.sort((a, b) => {
+    let filteredData = allCompaniesData;
+    
+    if (currentSearchQuery) {
+        filteredData = allCompaniesData.filter(company => {
+            const cName = String(company.Company || '').toLowerCase();
+            const uName = String(company.University || '').toLowerCase();
+            if (cName.includes(currentSearchQuery) || uName.includes(currentSearchQuery)) return true;
+            
+            if (typeof edgesData !== 'undefined' && edgesData.length > 0) {
+                const targetCompStr = String(company.Company);
+                const relatedEdges = edgesData.filter(e => String(e.target_company) === targetCompStr);
+                for (let e of relatedEdges) {
+                    if (String(e.source_patent || '').toLowerCase().includes(currentSearchQuery)) return true;
+                    if (String(e.target_patent || '').toLowerCase().includes(currentSearchQuery)) return true;
+                    if (String(e.source_ipc || '').toLowerCase().includes(currentSearchQuery)) return true;
+                    if (String(e.target_ipc || '').toLowerCase().includes(currentSearchQuery)) return true;
+                    if (String(e.target_title || '').toLowerCase().includes(currentSearchQuery)) return true;
+                    if (String(e.target_summary || '').toLowerCase().includes(currentSearchQuery)) return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    filteredData.sort((a, b) => {
         let valA = a[currentSortCol];
         let valB = b[currentSortCol];
 
@@ -86,7 +125,7 @@ function sortAndRenderTable() {
         return 0;
     });
 
-    renderCompanyTable(allCompaniesData.slice(0, 50));
+    renderCompanyTable(filteredData.slice(0, 50));
     updateSortIcons();
 }
 
@@ -109,6 +148,9 @@ function loadEdgesData() {
         dynamicTyping: true,
         complete: function(results) {
             edgesData = results.data.filter(e => e.target_company && e.source_uni);
+            if (currentSearchQuery) {
+                sortAndRenderTable();
+            }
         }
     });
 }
